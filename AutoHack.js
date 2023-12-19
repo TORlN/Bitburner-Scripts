@@ -1,4 +1,5 @@
 export async function main(ns) {
+    var hackVerbose = true;
     var server = ns.getServer(ns.args[0]);
     var verbose = ns.args[1];
     if (server.requiredHackingSkill > ns.getHackingLevel()) {
@@ -73,8 +74,12 @@ export async function main(ns) {
     var portion = ns.hackAnalyze(server.hostname) * numThreads;
     var targetMoney = portion * server.moneyMax;
     var realMoney = portion * server.moneyAvailable;
-    // ns.tprint("target money: $", targetMoney, " for server: ", server.hostname);
-    // ns.tprint("real money: $", realMoney, " for server: ", server.hostname);
+    var weaken;
+    if (server.baseDifficulty * 2 < server.hackDifficulty) {
+        weaken = true;
+    } else {
+        weaken = false;
+    }
     if (numThreads != 0) {
         var info = ns.ps(server.hostname);
         for (let i = 0; i < info.length; i++) {
@@ -95,8 +100,8 @@ export async function main(ns) {
             server.hostname,
             targetMoney,
             realMoney,
-            ns.getWeakenTime(server.hostname),
-            ns.getGrowTime(server.hostname)
+            weaken,
+            hackVerbose,
         );
     } else {
         if (verbose == true) {

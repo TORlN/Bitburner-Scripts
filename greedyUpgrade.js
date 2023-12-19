@@ -40,37 +40,57 @@ export async function main(ns) {
             }
         }
         var bought = false;
-        var choice = Math.floor(Math.random() * 3);
+        var choice = Math.floor(Math.random() * 100);
+        if (choice < 10) {
+            ns.print("Searching for core...")
+            choice = 2;
+        } else if (choice < 40) {
+            ns.print("Searching for ram...")
+            choice = 1;
+        } else {
+            ns.print("Searching for level...")
+            choice = 0;
+        }
         var list = generatePermutation(n);
-        for (let index = 0; index < list.length; index++) {
-            var node = list[index];
-            switch (choice) {
-                case 0:
-                    if (ns.hacknet.upgradeLevel(node) == true) {
-                        bought = true;
-                        ns.print("Bought level at node ", node);
-                    }
+        var endTime;
+        var startTime = Date.now();
+        while (bought == false) {
+            for (let index = 0; index < list.length; index++) {
+                var node = list[index];
+                switch (choice) {
+                    case 0:
+                        if (ns.hacknet.upgradeLevel(node) == true) {
+                            bought = true;
+                            ns.print("Bought level at node ", node);
+                        }
+                        break;
+                    case 1:
+                        if (ns.hacknet.upgradeRam(node) == true) {
+                            bought = true;
+                            ns.print("Bought ram at node ", node);
+                        }
+                        break;
+                    case 2:
+                        if (ns.hacknet.upgradeCore(node) == true) {
+                            bought = true;
+                            ns.print("Bought core at node ", node);
+                        }
+                        break;
+                    default:
+                        ns.print("weird choice: ", choice);
+                        break;
+                }
+                if (bought == true) {
                     break;
-                case 1:
-                    if (ns.hacknet.upgradeRam(node) == true) {
-                        bought = true;
-                        ns.print("Bought ram at node ", node);
-                    }
-                    break;
-                case 2:
-                    if (ns.hacknet.upgradeCore(node) == true) {
-                        bought = true;
-                        ns.print("Bought core at node ", node);
-                    }
-                    break;
-                default:
-                    ns.print("weird choice: ", choice);
-                    break;
+                }
             }
-            if (bought == true) {
+            await ns.sleep(100);
+            endTime = Date.now();
+            if (endTime - startTime > 100000) {
+                ns.print("ERROR Took too long to buy upgrade");
                 break;
             }
         }
-        await ns.sleep(1000)
+        await ns.sleep(100)
     }
 }

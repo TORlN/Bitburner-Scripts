@@ -3,19 +3,26 @@ export async function main(ns) {
     var server = ns.args[0];
     var targetMoney = ns.args[1];
     var realMoney = ns.args[2];
-    var weakenTime = ns.args[3];
-    var growTime = ns.args[4];
+    var weaken = ns.args[3];
+    var verbose = ns.args[4];
     if (realMoney < targetMoney) {
-        if (weakenTime < growTime) {
-            ns.tprint("WARN Weakening ", server, " by ", await ns.weaken(server));
+        if (weaken == true) {
+            var weakenValue = await ns.weaken(server);
+            if (verbose == true) {
+                ns.tprint("INFO Weakened ", server, " by ", weakenValue);
+            }
         } else {
-            ns.tprint("INFO Growing ", server, " by %", await ns.grow(server) - 1);
-            ns.tprint("INFO Target Money $", targetMoney, " Real Money $", realMoney);
+            var growValue = await ns.grow(server) - 1;
+            if (verbose == true) {
+                ns.tprint("INFO Grew ", server, " by %", growValue);
+            }
         }
-    } else {
+    } else if (weaken == false) {
         var hackValue = await ns.hack(server)
-        ns.tprint("SUCCESS Hacked ", server, " for $", hackValue);
-
+        if (hackValue > 0 && verbose == true) {
+            ns.tprint("SUCCESS Hacked ", server, " for $", hackValue);
+        } else {
+            ns.tprint("ERROR Failed to hack ", server);
+        }
     }
-
 }
