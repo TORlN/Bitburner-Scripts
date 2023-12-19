@@ -75,7 +75,7 @@ export async function main(ns) {
     var targetMoney = portion * server.moneyMax;
     var realMoney = portion * server.moneyAvailable;
     var weaken;
-    if (server.baseDifficulty * 2 < server.hackDifficulty) {
+    if (server.minDifficulty * 1.1 < server.hackDifficulty) {
         weaken = true;
     } else {
         weaken = false;
