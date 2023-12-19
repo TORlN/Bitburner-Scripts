@@ -71,25 +71,37 @@ export async function main(ns) {
     await ns.scp("localHack.js", server.hostname, "home");
     var numThreads = Math.floor((ns.getServerMaxRam(server.hostname)) / (ns.getScriptRam("localHack.js", server.hostname)));
     var portion = ns.hackAnalyze(server.hostname) * numThreads;
-    var targetMoney = Math.floor(portion * server.moneyMax);
-    ns.tprint(server.hostname, " target money: ", targetMoney)
+    var targetMoney = portion * server.moneyMax;
+    var realMoney = portion * server.moneyAvailable;
+    // ns.tprint("target money: $", targetMoney, " for server: ", server.hostname);
+    // ns.tprint("real money: $", realMoney, " for server: ", server.hostname);
     if (numThreads != 0) {
-        if (verbose == true) {
-            ns.tprint("SUCCESS Hacking ", server.hostname);
-        }
-        await ns.exec("localHack.js", server.hostname, numThreads, server.hostname, targetMoney, server.moneyMax);
-    } else {
         var info = ns.ps(server.hostname);
         for (let i = 0; i < info.length; i++) {
             if (info[i].filename == "localHack.js" && ns.isRunning(info[i].pid)) {
                 if (verbose == true) {
-                    ns.tprint("SUCCESS Hacked ", server.hostname);
-                    return
+                    ns.tprint("SUCCESS ", server.hostname, " is being hacked");
+                    return;
                 }
             }
         }
         if (verbose == true) {
+            ns.tprint("SUCCESS Hacking ", server.hostname);
+        }
+        await ns.exec(
+            "localHack.js",
+            server.hostname,
+            numThreads,
+            server.hostname,
+            targetMoney,
+            realMoney,
+            ns.getWeakenTime(server.hostname),
+            ns.getGrowTime(server.hostname)
+        );
+    } else {
+        if (verbose == true) {
             ns.tprint("ERROR Not enough RAM to hack server: ", server.hostname);
         }
+        return;
     }
 }

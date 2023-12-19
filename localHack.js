@@ -2,16 +2,18 @@
 export async function main(ns) {
     var server = ns.args[0];
     var targetMoney = ns.args[1];
-    var maxMoney = ns.args[2];
-    while (true) {
-        if (targetMoney > maxMoney) {
-            if (ns.getWeakenTime() < ns.getGrowTime()) {
-                await ns.weaken(server);
-            } else {
-                await ns.grow(server);
-            }
+    var realMoney = ns.args[2];
+    var weakenTime = ns.args[3];
+    var growTime = ns.args[4];
+    if (realMoney < targetMoney) {
+        if (weakenTime < growTime) {
+            ns.tprint("WARN Weakening " + server + " by " + await ns.weaken(server));
         } else {
-            await ns.hack(server);
+            ns.tprint("INFO growing " + server + " by %" + await ns.grow(server) - 1);
         }
+    } else {
+        var hackValue = await ns.hack(server)
+        ns.tprint("SUCCESS Hacked " + server + " for $" + hackValue);
     }
+
 }
