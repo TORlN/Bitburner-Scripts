@@ -9,11 +9,13 @@ export async function main(ns) {
         if (weakenTime < growTime) {
             ns.tprint("WARN Weakening ", server, " by ", await ns.weaken(server));
         } else {
-            ns.tprint("INFO growing ", server, " by %", await ns.grow(server) - 1);
+            ns.tprint("INFO Growing ", server, " by %", await ns.grow(server) - 1);
+            ns.tprint("INFO Target Money $", targetMoney, " Real Money $", realMoney);
         }
     } else {
         var hackValue = await ns.hack(server)
         ns.tprint("SUCCESS Hacked ", server, " for $", hackValue);
+
     }
 
 }
