@@ -1,8 +1,6 @@
 export async function main(ns) {
     var server = ns.getServer(ns.args[0]);
     var verbose = ns.args[1];
-    var portion = .3;
-    var targetMoney = Math.floor(portion * server.moneyMax);
     if (server.requiredHackingSkill > ns.getHackingLevel()) {
         if (verbose == true) {
             ns.tprint("INFO Hacking level not high enough to hack: ", server.hostname, " (", server.requiredHackingSkill, ")");
@@ -71,17 +69,15 @@ export async function main(ns) {
     }
     ns.print("copying...");
     await ns.scp("localHack.js", server.hostname, "home");
-    var usableRam = server.maxRam - server.ramUsed;
-    var numThreads = 0;
-    while (usableRam >= ns.getScriptRam("localHack.js", server.hostname)) {
-        numThreads += 1;
-        usableRam -= ns.getScriptRam("localHack.js", server.hostname);
-    }
+    var numThreads = Math.floor((ns.getServerMaxRam(server.hostname)) / (ns.getScriptRam("localHack.js", server.hostname)));
+    var portion = ns.hackAnalyze(server.hostname) * numThreads;
+    var targetMoney = Math.floor(portion * server.moneyMax);
+    ns.tprint(server.hostname, " target money: ", targetMoney)
     if (numThreads != 0) {
         if (verbose == true) {
             ns.tprint("SUCCESS Hacking ", server.hostname);
         }
-        await ns.exec("localHack.js", server.hostname, numThreads, server.hostname, targetMoney, numThreads);
+        await ns.exec("localHack.js", server.hostname, numThreads, server.hostname, targetMoney, server.moneyMax);
     } else {
         var info = ns.ps(server.hostname);
         for (let i = 0; i < info.length; i++) {
