@@ -7,13 +7,13 @@ export async function main(ns) {
     var growTime = ns.args[4];
     if (realMoney < targetMoney) {
         if (weakenTime < growTime) {
-            ns.tprint("WARN Weakening " + server + " by " + await ns.weaken(server));
+            ns.tprint("WARN Weakening ", server, " by ", await ns.weaken(server));
         } else {
-            ns.tprint("INFO growing " + server + " by %" + await ns.grow(server) - 1);
+            ns.tprint("INFO growing ", server, " by %", await ns.grow(server) - 1);
         }
     } else {
         var hackValue = await ns.hack(server)
-        ns.tprint("SUCCESS Hacked " + server + " for $" + hackValue);
+        ns.tprint("SUCCESS Hacked ", server, " for $", hackValue);
     }
 
 }
