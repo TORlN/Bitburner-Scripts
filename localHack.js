@@ -14,7 +14,7 @@ export async function main(ns) {
     if (weaken == true) {
         var weakenValue = await ns.weaken(server);
         if (verbose == true) {
-            ns.tprint("\u001b[33m", "INFO Weakened ", server, " by ", weakenValue, "\u001b[0m");
+            ns.tprint("\u001b[33m", "Weakened ", server, " by ", weakenValue, "\u001b[0m");
         }
     } else if (realMoney >= lowerBound) {
         var hackValue = await ns.hack(server)
@@ -27,7 +27,7 @@ export async function main(ns) {
     if (realMoney < targetMoney) {
         var growValue = await ns.grow(server) - 1;
         if (verbose == true) {
-            ns.tprint("INFO Grew ", server, " by %", growValue);
+            ns.tprint("\u001b[36m", "Grew ", server, " by %", growValue, "\u001b[0m");
         }
     }
 }

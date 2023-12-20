@@ -93,7 +93,7 @@ export async function main(ns) {
             }
             await ns.sleep(100);
             endTime = Date.now();
-            if (endTime - startTime > 200000) {
+            if (endTime - startTime > 11112 * n) {
                 ns.print("ERROR Took too long to buy upgrade");
                 break;
             } else if (canBuy == false) {

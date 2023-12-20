@@ -6,7 +6,7 @@ export async function main(ns) {
     while (true) {
         var growValue = await ns.grow(server) - 1;
         if (verbose == true) {
-            ns.tprint("INFO Grew ", server, " by %", growValue);
+            ns.tprint("\u001b[36m", "Grew ", server, " by %", growValue, "\u001b[0m");
         }
     }
 }
