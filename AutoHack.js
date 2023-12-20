@@ -1,3 +1,4 @@
+/** @param {NS} ns */
 export async function main(ns) {
     var hackVerbose = true;
     var server = ns.getServer(ns.args[0]);
@@ -71,9 +72,9 @@ export async function main(ns) {
     ns.print("copying...");
     await ns.scp("localHack.js", server.hostname, "home");
     var numThreads = Math.floor((ns.getServerMaxRam(server.hostname)) / (ns.getScriptRam("localHack.js", server.hostname)));
-    var portion = ns.hackAnalyze(server.hostname) * numThreads;
-    var targetMoney = portion * server.moneyMax;
-    var realMoney = portion * server.moneyAvailable;
+    var targetPortion = ns.hackAnalyze(server.hostname) * numThreads;
+    var targetMoney = targetPortion * server.moneyMax;
+    var realMoney = targetPortion * server.moneyAvailable;
     var weaken;
     if (server.minDifficulty * 1.1 < server.hackDifficulty) {
         weaken = true;
@@ -104,9 +105,35 @@ export async function main(ns) {
             hackVerbose,
         );
     } else {
-        if (verbose == true) {
-            ns.tprint("ERROR Not enough RAM to hack server: ", server.hostname);
+        if (verbose == true) { ns.tprint("WARN Not enough RAM to hack server: ", server.hostname); }
+        if (ns.getServerMaxRam(server.hostname) == 0) {
+            if (verbose == true) { ns.tprint("WARN", server.hostname, " has no RAM. Attempting to buy server named: ", server.hostname, "-personal"); }
+            if (await ns.purchaseServer(server.hostname + "-personal", 8) != "" || ns.serverExists(server.hostname + "-personal")) {
+                if (verbose == true) { ns.tprint("SUCCESS Hacking ", server.hostname); }
+                await ns.scp("localHack.js", server.hostname + "-personal", "home");
+                var threads = Math.floor((ns.getServerMaxRam(server.hostname + "-personal")) / (ns.getScriptRam("localHack.js", "home")));
+                targetPortion = ns.hackAnalyze(server.hostname) * numThreads;
+                targetMoney = targetPortion * server.moneyMax;
+                realMoney = targetPortion * server.moneyAvailable;
+                if (server.minDifficulty * 1.1 < server.hackDifficulty) {
+                    weaken = true;
+                } else {
+                    weaken = false;
+                }
+                await ns.exec(
+                    "localHack.js",
+                    server.hostname + "-personal",
+                    threads,
+                    server.hostname,
+                    targetMoney,
+                    realMoney,
+                    weaken,
+                    hackVerbose,);
+            } else {
+                if (verbose == true) { ns.tprint("ERROR Failed to buy server: ", server.hostname, "-personal"); }
+            }
         }
+
         return;
     }
 }

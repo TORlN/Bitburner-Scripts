@@ -7,6 +7,6 @@ export async function main(ns) {
             await ns.ui.clearTerminal();
         }
         await ns.exec("depthHack.js", "home", 1, "home", depth, verbose);
-        await ns.sleep(100)
+        await ns.sleep(1000)
     }
 }
