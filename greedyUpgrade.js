@@ -40,13 +40,16 @@ export async function main(ns) {
             }
         }
         var bought = false;
-        var choice = Math.floor(Math.random() * 3);
-        if (choice == 2) {
+        var choice = Math.floor(Math.random() * 100);
+        if (choice < 10) {
             ns.print("Searching for core...")
-        } else if (choice == 1) {
+            choice = 2;
+        } else if (choice < 20 && choice >= 10) {
             ns.print("Searching for ram...")
+            choice = 1;
         } else {
             ns.print("Searching for level...")
+            choice = 0;
         }
         var list = generatePermutation(n);
         var endTime;
@@ -93,7 +96,7 @@ export async function main(ns) {
             }
             await ns.sleep(100);
             endTime = Date.now();
-            if (endTime - startTime > 11112 * n) {
+            if (endTime - startTime > 5000 * n) {
                 ns.print("ERROR Took too long to buy upgrade");
                 break;
             } else if (canBuy == false) {
