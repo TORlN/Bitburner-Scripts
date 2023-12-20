@@ -6,7 +6,7 @@ export async function main(ns) {
     while (true) {
         var weakenValue = await ns.weaken(server);
         if (verbose == true) {
-            ns.tprint("\u001b[33m", "INFO Weakened ", server, " by ", weakenValue, "\u001b[0m");
+            ns.tprint("\u001b[33m", "Weakened ", server, " by ", weakenValue, "\u001b[0m");
         }
     }
 }
