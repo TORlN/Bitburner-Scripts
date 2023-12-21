@@ -1,4 +1,20 @@
 /** @param {NS} ns */
+async function refactorServers(ns, serverName) {
+    var servers = await ns.getPurchasedServers();
+    var min = Infinity;
+    var minIndex = 0;
+    for (let i = 0; i < servers.length; i++) {
+        var server = await ns.getServer(servers[i]);
+        if (server.moneyMax < min) {
+            min = server.moneyMax;
+            minIndex = i;
+        }
+        await ns.sleep(1);
+    }
+    // ns.tprint(serverName, " has been replaced by ", await ns.getServer(servers[minIndex]));
+    await ns.renamePurchasedServer(servers[minIndex], serverName);
+}
+
 async function checkUpgrade(ns, ram, server) {
     var exponent = Math.floor(Math.log2(ram)) + 1;
     if (await ns.upgradePurchasedServer(server, Math.pow(2, exponent))) {
@@ -112,8 +128,14 @@ export async function main(ns) {
     } if (ns.getServerMaxRam(server.hostname) == 0 || ns.getServerUsedRam(server.hostname) >= ns.getServerMaxRam(server.hostname) - ns.getScriptRam("localHack.js", server.hostname)) {
         var ram = 2;
         if (!ns.serverExists(server.hostname + "-personal")) {
-            if (await ns.purchaseServer(server.hostname + "-personal", ram) == "") {
-                return;
+            if (ns.getPurchasedServers().length >= ns.getPurchasedServerLimit()) {
+                if (server.moneyMax == 0) {
+                    ns.exit();
+                }
+                await refactorServers(ns, server.hostname + "-personal");
+            }
+            else {
+                await ns.purchaseServer(server.hostname + "-personal", ram)
             }
             while (prevRam != ram) {
                 var prevRam = ram;
@@ -123,7 +145,6 @@ export async function main(ns) {
                 }
                 await ns.sleep(1);
             }
-
         } else {
             ram = ns.getServerMaxRam(server.hostname + "-personal");
             var prevRam;
@@ -136,26 +157,28 @@ export async function main(ns) {
                 await ns.sleep(1);
             }
         }
-        if (verbose == true) { ns.tprint("SUCCESS Hacking ", server.hostname); }
-        await ns.scp("localHack.js", server.hostname + "-personal", "home");
-        var numServerThreads = Math.floor((ns.getServerMaxRam(server.hostname + "-personal")) / (ns.getScriptRam("localHack.js", "home")));
-        targetPortion = ns.hackAnalyze(server.hostname) * numServerThreads;
-        targetMoney = targetPortion * server.moneyMax;
-        realMoney = targetPortion * server.moneyAvailable;
-        if (server.minDifficulty * 1.1 < server.hackDifficulty) {
-            weaken = true;
-        } else {
-            weaken = false;
-        }
-        await ns.exec(
-            "localHack.js",
-            server.hostname + "-personal",
-            numServerThreads,
-            server.hostname,
-            targetMoney,
-            realMoney,
-            weaken,
-            hackVerbose,);
+        if (ns.serverExists(server.hostname + "-personal")) {
+            if (verbose == true) { ns.tprint("SUCCESS Hacking ", server.hostname); }
+            await ns.scp("localHack.js", server.hostname + "-personal", "home");
+            var numServerThreads = Math.floor((ns.getServerMaxRam(server.hostname + "-personal")) / (ns.getScriptRam("localHack.js", "home")));
+            targetPortion = ns.hackAnalyze(server.hostname) * numServerThreads;
+            targetMoney = targetPortion * server.moneyMax;
+            realMoney = targetPortion * server.moneyAvailable;
+            if (server.minDifficulty * 1.1 < server.hackDifficulty) {
+                weaken = true;
+            } else {
+                weaken = false;
+            }
+            await ns.exec(
+                "localHack.js",
+                server.hostname + "-personal",
+                numServerThreads,
+                server.hostname,
+                targetMoney,
+                realMoney,
+                weaken,
+                hackVerbose,);
 
+        }
     }
 }
