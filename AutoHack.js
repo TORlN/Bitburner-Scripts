@@ -119,6 +119,9 @@ export async function main(ns) {
             while (prevRam != ram) {
                 var prevRam = ram;
                 ram = await checkUpgrade(ns, prevRam, server.hostname + "-personal");
+                if (prevRam != ram && hackVerbose == true) {
+                    ns.tprint("\u001b[37m", "Upgraded ", server.hostname + "-personal", " to ", ram, "GB", "\u001b[0m")
+                }
                 await ns.sleep(1);
             }
 
@@ -128,6 +131,9 @@ export async function main(ns) {
             while (prevRam != ram) {
                 var prevRam = ram;
                 ram = await checkUpgrade(ns, prevRam, server.hostname + "-personal");
+                if (prevRam != ram && hackVerbose == true) {
+                    ns.tprint("\u001b[37m", "Upgraded ", server.hostname + "-personal", " to ", ram, "GB", "\u001b[0m")
+                }
                 await ns.sleep(1);
             }
         }

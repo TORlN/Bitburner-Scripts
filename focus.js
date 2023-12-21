@@ -38,3 +38,5 @@ export async function main(ns) {
         await ns.sleep(100);
     }
 }
+
+//DEPRECATED    
