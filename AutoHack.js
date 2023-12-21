@@ -8,7 +8,6 @@ async function checkUpgrade(ns, ram, server) {
 }
 
 export async function main(ns) {
-    var maxPortion = .3;
     var hackVerbose = true;
     var server = ns.getServer(ns.args[0]);
     var verbose = ns.args[1];
@@ -78,7 +77,7 @@ export async function main(ns) {
     ns.print("copying...");
     await ns.scp("localHack.js", server.hostname, "home");
     var numLocalThreads = Math.floor((ns.getServerMaxRam(server.hostname)) / (ns.getScriptRam("localHack.js", server.hostname)));
-    var targetPortion = Math.min((ns.hackAnalyze(server.hostname) * numLocalThreads), maxPortion);
+    var targetPortion = (ns.hackAnalyze(server.hostname) * numLocalThreads);
     var targetMoney = targetPortion * server.moneyMax;
     var realMoney = targetPortion * server.moneyAvailable;
     var weaken;
@@ -140,7 +139,7 @@ export async function main(ns) {
         if (verbose == true) { ns.tprint("SUCCESS Hacking ", server.hostname); }
         await ns.scp("localHack.js", server.hostname + "-personal", "home");
         var numServerThreads = Math.floor((ns.getServerMaxRam(server.hostname + "-personal")) / (ns.getScriptRam("localHack.js", "home")));
-        targetPortion = Math.min(ns.hackAnalyze(server.hostname) * numServerThreads, maxPortion);
+        targetPortion = ns.hackAnalyze(server.hostname) * numServerThreads;
         targetMoney = targetPortion * server.moneyMax;
         realMoney = targetPortion * server.moneyAvailable;
         if (server.minDifficulty * 1.1 < server.hackDifficulty) {
