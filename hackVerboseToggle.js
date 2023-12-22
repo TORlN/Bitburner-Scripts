@@ -4,10 +4,10 @@ export async function main(ns) {
     for (let i = 0; i < info.length; i++) {
         if (info[i].filename == "autoDepth.js") {
             var args = info[i].args;
-            if (args[1] == true) {
-                args[1] = false;
+            if (args[2] == true) {
+                args[2] = false;
             } else {
-                args[1] = true;
+                args[2] = true;
             }
             ns.kill(info[i].pid);
             await ns.ui.clearTerminal();

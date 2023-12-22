@@ -73,7 +73,7 @@ export async function main(ns) {
         if (server.sqlPortOpen == false) {
             if (ns.fileExists("SQLInject.exe", "home")) {
                 numPorts -= 1;
-                await ns.sqlInject(server.hostname);
+                await ns.sqlinject(server.hostname);
             } else {
                 ns.print("ERROR Failed to close SQL port");
             }
