@@ -12,6 +12,8 @@ Auto depth intiates a depth-first search of all servers up to the depth paramete
 
 Depth verbose will print information on each server touched by depth-first-search and hack verbose will show you real time information on each server's growth, weakens, and hacks.
 
+autoDepth.js requires a server with at least 32GB of ram. This script will not function properly at a lower ram level.
+
 Example of autoDepth.js:
 
 ```run autoDepth.js 10 false true```
