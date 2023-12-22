@@ -12,7 +12,15 @@ async function refactorServers(ns, serverName) {
         await ns.sleep(1);
     }
     // ns.tprint(serverName, " has been replaced by ", await ns.getServer(servers[minIndex]));
-    await ns.renamePurchasedServer(servers[minIndex], serverName);
+    var originalServerSubstring = serverName.split("-personal")[0];
+    var existingServerSubstring = servers[minIndex].split("-personal")[0];
+    if (await ns.getServer(originalServerSubstring).moneyMax > await ns.getServer(existingServerSubstring).moneyMax) {
+        ns.tprint("ERROR: ", serverSubstring, " has a higher moneyMax than ", servers[minIndex])
+        await ns.renamePurchasedServer(servers[minIndex], serverName);
+    } else {
+        ns.exit();
+        ns.print("ERROR: ", serverName, " has a lower moneyMax than ", servers[minIndex])
+    }
 }
 
 async function checkUpgrade(ns, ram, server) {
@@ -135,6 +143,7 @@ export async function main(ns) {
                 await refactorServers(ns, server.hostname + "-personal");
             }
             else {
+                ns.tprint("\u001b[37m", "Purchasing ", server.hostname + "-personal", "\u001b[0m");
                 await ns.purchaseServer(server.hostname + "-personal", ram)
             }
             while (prevRam != ram) {
