@@ -32,9 +32,9 @@ async function checkUpgrade(ns, ram, server) {
 }
 
 export async function main(ns) {
-    var hackVerbose = true;
     var server = ns.getServer(ns.args[0]);
     var verbose = ns.args[1];
+    var hackVerbose = ns.args[2];
     if (server.requiredHackingSkill > ns.getHackingLevel()) {
         if (verbose == true) {
             ns.tprint("INFO Hacking level not high enough to hack: ", server.hostname, " (", server.requiredHackingSkill, ")");
