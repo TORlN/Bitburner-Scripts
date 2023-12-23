@@ -143,8 +143,10 @@ export async function main(ns) {
                 await refactorServers(ns, server.hostname + "-personal");
             }
             else {
-                ns.tprint("\u001b[37m", "Purchasing ", server.hostname + "-personal", "\u001b[0m");
                 await ns.purchaseServer(server.hostname + "-personal", ram)
+                if (ns.serverExists(server.hostname + "-personal") && hackVerbose == true) {
+                    ns.tprint("\u001b[37m", "Purchased ", server.hostname + "-personal", "\u001b[0m");
+                }
             }
             while (prevRam != ram) {
                 var prevRam = ram;
