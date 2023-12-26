@@ -15,7 +15,7 @@ async function refactorServers(ns, serverName) {
     var originalServerSubstring = serverName.split("-personal")[0];
     var existingServerSubstring = servers[minIndex].split("-personal")[0];
     if (await ns.getServer(originalServerSubstring).moneyMax > await ns.getServer(existingServerSubstring).moneyMax) {
-        ns.tprint("ERROR: ", originalServerSubstring, " has a higher moneyMax than ", servers[minIndex])
+        ns.print("ERROR: ", originalServerSubstring, " has a higher moneyMax than ", servers[minIndex])
         await ns.renamePurchasedServer(servers[minIndex], serverName);
     } else {
         ns.exit();
