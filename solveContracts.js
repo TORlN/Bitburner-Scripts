@@ -36,7 +36,6 @@ export async function main(ns) {
             break;
         case "Total Ways to Sum II":
             var data = await ns.codingcontract.getData(file, server);
-            ns.tprint(data[0])
             // var soln = await ns.run("./coding%20contracts/totalWaysToSum2.js", 1, data[0], data[1]);
             // if (ns.codingcontract.attempt(soln, files[i], server) != "") {
             //     ns.tprint("SUCCESS Solved " + files[i] + " on " + server);

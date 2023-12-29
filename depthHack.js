@@ -8,7 +8,7 @@ async function hack(ns, server, depth, verbose, hackVerbose) {
     await ns.print("scanning...");
     var neighbors = ns.scan(server).filter(neighbor => !serverSet.has(neighbor) && !neighbor.endsWith('-personal'));
     if (server != "home" && ns.serverExists(server)) {
-        var pid = await ns.run("AutoHack.js", 1, server, verbose, hackVerbose);
+        var pid = await ns.run("AutoHack.js", { preventDuplicates: true }, server, verbose, hackVerbose);
         while (ns.isRunning(pid)) {
             await ns.sleep(1)
         }
