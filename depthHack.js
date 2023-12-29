@@ -18,12 +18,12 @@ async function hack(ns, server, depth, verbose, hackVerbose) {
             for (let i = 0; i < files.length; i++) {
                 await ns.exec("solveContracts.js", "home", { preventDuplicates: true }, server, files[i], hackVerbose);
             }
-        } else if (f.length > 0) {
-            await ns.exec("solveContracts.js", "home", { preventDuplicates: true }, "home", f[0], hackVerbose);
-        } else {
-            ns.tprint("creating dummy contract");
-            ns.codingcontract.createDummyContract("Total Ways to Sum II");
-        }
+        } //else if (f.length > 0) {
+        //     await ns.exec("solveContracts.js", "home", { preventDuplicates: true }, "home", f[0], hackVerbose);
+        // } else {
+        //     ns.tprint("creating dummy contract");
+        //     ns.codingcontract.createDummyContract("Total Ways to Sum II");
+        // }
     }
     for (let i = 0; i < neighbors.length; i++) {
         if (serverSet.has(neighbors[i])) {
