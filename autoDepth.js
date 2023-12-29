@@ -7,7 +7,9 @@ export async function main(ns) {
         if (verbose == true) {
             await ns.ui.clearTerminal();
         }
-        await ns.exec("depthHack.js", "home", 1, "home", depth, verbose, hackVerbose);
+        if (ns.isRunning("depthHack.js", "home", "home", depth, verbose, hackVerbose) == false) {
+            await ns.exec("depthHack.js", "home", 1, "home", depth, verbose, hackVerbose);
+        }
         await ns.sleep(1000)
     }
 }
