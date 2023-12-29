@@ -19,7 +19,7 @@ export async function main(ns) {
     } else if (realMoney >= lowerBound) {
         var hackValue = await ns.hack(server)
         if (hackValue > 0 && verbose == true) {
-            ns.tprint("Hacked ", server, " for $", hackValue);
+            ns.tprint("\u001b[32m" + "Hacked ", server, " for $", hackValue + "\u001b[0m");
         } else if (verbose == true) {
             ns.tprint("ERROR Failed to hack ", server);
         }
