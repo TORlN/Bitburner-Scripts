@@ -39,14 +39,17 @@ function printLogging(ns, str, type, server) {
         ns.tprint("\u001b[31m" + "Failed to solve " + type + " contract on " + server + "\u001b[0m");
     }
 }
+function spiralize(ns, arr) {
+
+}
 /** @param {NS} ns */
 export async function main(ns) {
     var server = ns.args[0];
     var file = ns.args[1];
     var verbose = ns.args[2];
+    var data = await ns.codingcontract.getData(file, server);
     switch (await ns.codingcontract.getContractType(file, server)) {
         case "Total Ways to Sum":
-            var data = await ns.codingcontract.getData(file, server);
             var soln = await findDistinctCombos(data, data) - 1;
             var str = await ns.codingcontract.attempt(soln, file, server);
             if (verbose) {
@@ -54,12 +57,14 @@ export async function main(ns) {
             }
             break;
         case "Total Ways to Sum II":
-            var data = await ns.codingcontract.getData(file, server);
             var soln = await arrayCombos(data[0], data[1], 0, 0);
             var str = await ns.codingcontract.attempt(soln, file, server);
             if (verbose) {
                 printLogging(ns, str, "Total Ways to Sum II", server);
             }
+            break;
+        case "Spiralize Matrix":
+
             break;
         default:
 
