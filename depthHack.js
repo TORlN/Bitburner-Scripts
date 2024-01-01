@@ -17,7 +17,7 @@ async function hack(ns, server, depth, verbose, hackVerbose) {
     //     await ns.exec("solveContracts.js", "home", { preventDuplicates: true }, "home", f[0], hackVerbose);
     // } else {
     //     ns.tprint("creating dummy contract");
-    //     ns.codingcontract.createDummyContract("Total Ways to Sum II");
+    //     ns.codingcontract.createDummyContract("Array Jumping Game II");
     // }
     if (server != "home" && ns.serverExists(server)) {
         var pid = await ns.run("AutoHack.js", { preventDuplicates: true }, server, verbose, hackVerbose);
