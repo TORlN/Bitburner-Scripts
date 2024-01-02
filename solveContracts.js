@@ -133,6 +133,25 @@ function arrayJumpingGameTwo(arr, memo = new Map()) {
     memo.set(key, minJump);
     return minJump;
 }
+
+function mergeOverlapping(arr) {
+    var intervals = [arr[0]];
+    arr.sort((a, b) => a[0] - b[0]);
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < intervals.length; j++) {
+            if (arr[i][0] >= intervals[j][0] && arr[i][1] <= intervals[j][1]) {
+                break;
+            } else if (arr[i][0] >= intervals[j][0]) {
+                intervals[j][1] = arr[i][1];
+            } else if (arr[i][1] <= intervals[j][1]) {
+                intervals[j][0] = arr[i][0];
+            } else {
+                intervals.push(arr[i]);
+            }
+        }
+    }
+    return intervals;
+}
 /** @param {NS} ns */
 export async function main(ns) {
     var server = ns.args[0];
@@ -192,6 +211,14 @@ export async function main(ns) {
                 printLogging(ns, str, "Array Jumping Game II", server, data);
             }
             break;
+        // case "Merge Overlapping Intervals":
+        //     var soln = await mergeOverlapping(data);
+        //     var str = await ns.codingcontract.attempt(soln, file, server);
+        //     ns.tprint(soln);
+        //     if (verbose) {
+        //         printLogging(ns, str, "Merge Overlapping Intervals", server, data);
+        //     }
+        //     break;
         default:
             break;
     }

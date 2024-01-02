@@ -14,10 +14,11 @@ async function hack(ns, server, depth, verbose, hackVerbose) {
             await ns.exec("solveContracts.js", "home", { preventDuplicates: true }, server, files[i], hackVerbose);
         }
     } //else if (f.length > 0) {
-    //     await ns.exec("solveContracts.js", "home", { preventDuplicates: true }, "home", f[0], hackVerbose);
+    // await ns.exec("solveContracts.js", "home", { preventDuplicates: true }, "home", f[0], hackVerbose);
+    //     // await ns.sleep(10000)
     // } else {
     //     ns.tprint("creating dummy contract");
-    //     ns.codingcontract.createDummyContract("Array Jumping Game II");
+    //     ns.codingcontract.createDummyContract("Merge Overlapping Intervals");
     // }
     if (server != "home" && ns.serverExists(server)) {
         var pid = await ns.run("AutoHack.js", { preventDuplicates: true }, server, verbose, hackVerbose);
